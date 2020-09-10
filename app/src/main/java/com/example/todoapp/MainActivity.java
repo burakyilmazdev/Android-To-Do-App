@@ -1,13 +1,18 @@
 package com.example.todoapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -15,6 +20,8 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +60,40 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setNotes(notes);
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                switch (direction){
+                    case ItemTouchHelper.LEFT:
+                        noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
+                        Toast.makeText(MainActivity.this,"Not silindi",Toast.LENGTH_LONG).show();
+                        break;
+                    case ItemTouchHelper.RIGHT:
+                        //update
+                        Toast.makeText(MainActivity.this,"Edit",Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.colorDelete))
+                        .addSwipeLeftActionIcon(R.drawable.ic_delete_black_24dp)
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.colorEdit))
+                        .addSwipeRightActionIcon(R.drawable.ic_edit_black_24dp)
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @Override

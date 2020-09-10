@@ -45,4 +45,8 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 
+    //Xabaras for RecylerviewSwipeDecorator
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+
+
 }
