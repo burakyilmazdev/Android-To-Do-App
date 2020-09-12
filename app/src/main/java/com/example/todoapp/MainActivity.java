@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NoteViewModel noteViewModel;
     public static final int ADD_NOTE_REQUEST = 1;
+    public static final int EDIT_NOTE_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,AddNoteActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
                 startActivityForResult(intent,ADD_NOTE_REQUEST);
 
             }
@@ -80,7 +80,16 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case ItemTouchHelper.RIGHT:
                         //update
-                        Toast.makeText(MainActivity.this,"Edit",Toast.LENGTH_LONG).show();
+                       Note note = adapter.getNoteAt(viewHolder.getAdapterPosition());
+                        Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
+                        intent.putExtra(AddEditNoteActivity.EXTRA_ID,note.getId());
+                        intent.putExtra(AddEditNoteActivity.EXTRA_TITLE,note.getTitle());
+                        intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION,note.getDescription());
+                        intent.putExtra(AddEditNoteActivity.EXTRA_PRIORITY,note.getPriority());
+                        startActivityForResult(intent,EDIT_NOTE_REQUEST);
+
+
+
                         break;
                 }
             }
@@ -97,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(recyclerView);
+
+
     }
 
     @Override
@@ -104,13 +115,27 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ADD_NOTE_REQUEST && resultCode == RESULT_OK){
-            String title = data.getStringExtra(AddNoteActivity.EXTRA_TITLE);
-            String description = data.getStringExtra(AddNoteActivity.EXTRA_DESCRIPTION);
-            int priority = data.getIntExtra(AddNoteActivity.EXTRA_PRIORITY,1);
+            String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
+            String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+            int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY,1);
 
             Note note = new Note(title,description,priority);
             noteViewModel.insert(note);
             Toast.makeText(this,"Not kaydedildi",Toast.LENGTH_SHORT).show();
+
+        }
+        else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK){
+            int id = data.getIntExtra(AddEditNoteActivity.EXTRA_ID,-1);
+
+            if (id==-1){
+                Toast.makeText(this,"Not güncellenemedi",Toast.LENGTH_SHORT).show();
+            }
+            String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
+            String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
+            int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY,1);
+            Note note = new Note(title,description,priority);
+            note.setId(id);
+            noteViewModel.update(note);
 
         }
         else {
