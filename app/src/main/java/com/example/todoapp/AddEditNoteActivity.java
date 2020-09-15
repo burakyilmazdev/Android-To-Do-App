@@ -69,7 +69,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString();
         int priority = numberPicker.getValue();
         if (title.trim().isEmpty() || description.trim().isEmpty()){
-            Toast.makeText(this,"Başlık veya açıklama boş bırakılamaz!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Title or description cannot be empty!",Toast.LENGTH_SHORT).show();
             return;
         }
 

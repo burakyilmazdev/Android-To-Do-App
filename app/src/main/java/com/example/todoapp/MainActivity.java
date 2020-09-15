@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (direction){
                     case ItemTouchHelper.LEFT:
                         noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-                        Toast.makeText(MainActivity.this,"Not silindi",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this,"Note has been deleted",Toast.LENGTH_LONG).show();
                         break;
                     case ItemTouchHelper.RIGHT:
                         //update
@@ -121,14 +121,14 @@ public class MainActivity extends AppCompatActivity {
 
             Note note = new Note(title,description,priority);
             noteViewModel.insert(note);
-            Toast.makeText(this,"Not kaydedildi",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Note has been saved",Toast.LENGTH_SHORT).show();
 
         }
         else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK){
             int id = data.getIntExtra(AddEditNoteActivity.EXTRA_ID,-1);
 
             if (id==-1){
-                Toast.makeText(this,"Not güncellenemedi",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Note couldn't been updated!",Toast.LENGTH_SHORT).show();
             }
             String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
             String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else {
-            Toast.makeText(this,"Not kaydedilemedi",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Note couldn't been saved!",Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.delete_all_notes:
                 noteViewModel.deleteAllNotes();
-                Toast.makeText(this,"Bütün notlar silindi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"All notes have been deleted!", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
