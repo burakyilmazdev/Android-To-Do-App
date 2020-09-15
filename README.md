@@ -8,7 +8,12 @@ Basit bir yapılacaklar uygulamasıdır. Başlık,açıklama ve öncelik girerek
 LiveData, ViewModel ,Room gibi bazı architecture componentler kullanılmıştır ve MVVM design paterni kullanılarak yapılmıştır.
 
 
+
+
 ![0](https://user-images.githubusercontent.com/45144910/93238806-98d70f80-f78a-11ea-8d3f-63100589a817.png)
-![1](https://user-images.githubusercontent.com/45144910/93238810-9aa0d300-f78a-11ea-8df9-78bc34a5433b.png)
-![2](https://user-images.githubusercontent.com/45144910/93238811-9aa0d300-f78a-11ea-81b7-7a0cb2223322.png)
+
+
+
+![Adsız](https://user-images.githubusercontent.com/45144910/93239536-975a1700-f78b-11ea-8c98-15fd4102a61e.png)
+
 
